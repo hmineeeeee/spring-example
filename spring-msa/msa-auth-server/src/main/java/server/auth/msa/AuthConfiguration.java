@@ -1,9 +1,6 @@
 package server.auth.msa;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
@@ -14,11 +11,14 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableAuthorizationServer
@@ -33,14 +33,31 @@ public class AuthConfiguration extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
     private ResourceServerProperties resourceServerProperties;
-    
+
+    @Autowired
+    public DataSource dataSource;
+
+    @Bean
+    public TokenStore JdbcTokenStore(DataSource dataSource ) {
+        return new JdbcTokenStore(dataSource);
+    }
+
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints)
             throws Exception {
     	// 인증 과정 endpoint에 대한 설정을 해줍니다. 
         super.configure(endpoints);
         endpoints.accessTokenConverter(jwtAccessTokenConverter())
-        		 .authenticationManager(authenticationManager);
+        		 .authenticationManager(authenticationManager)
+//                 .tokenStore(JdbcTokenStore(dataSource))
+        ;
+    }
+
+    @Override
+
+    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception
+    {
+        oauthServer.checkTokenAccess("permitAll()");
     }
   	
 	@Override

@@ -34,5 +34,17 @@ public class User {
 	private int userType;
 	@Column(nullable = false)
 	private Date date;
-	
+/*
+	public void setUsername(String username) {
+		username = username;
+	}
+
+	public void setPassword(String password) {
+		password= password;
+	}
+
+	public void setUserType(String userType) {
+		userType= userType;
+	}
+*/	
 }
