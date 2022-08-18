@@ -1,0 +1,12 @@
+-- 1. get token
+curl auth_id:auth_secret@localhost:8095/oauth/token -d grant_type=password -d client_id=auth_id -d scope=read -d username=admin -d password=1234!
+
+-- 2. check token
+curl -X POST "http://localhost:8095/oauth/check_token" -d "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA4MTk4MDksInVzZXJfbmFtZSI6ImFkbWluIiwiYXV0aG9yaXRpZXMiOlsiVVNFUiIsIkFETUlOIl0sImp0aSI6ImM4NWFhYjk2LTRlNjUtNDBjMS04ZTA2LTc2NjM0ZGVkNmE1YiIsImNsaWVudF9pZCI6ImF1dGhfaWQiLCJzY29wZSI6WyJyZWFkIl19.WbLySwStPmP5tr8eM0qKluxlzXM8iEt6Zprdi5U9Xt4"
+
+-- 3. api call
+curl -H "Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA4MTkyNDYsInVzZXJfbmFtZSI6ImFkbWluIiwiYXV0aG9yaXRpZXMiOlsiVVNFUiIsIkFETUlOIl0sImp0aSI6Ijc1ZmUyNjA3LThlMzktNGM4OC1hODUyLTU3ZmNjZGY3YTc3ZCIsImNsaWVudF9pZCI6ImF1dGhfaWQiLCJzY29wZSI6WyJyZWFkIl19.5d37rm99GngYzB-tff7d0CxgPr99Y8eevi0_SCQ4eI4" "http://localhost:8000"
+curl -H "Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjA4MTY3MDMsInVzZXJfbmFtZSI6InRhZXMiLCJhdXRob3JpdGllcyI6WyJVU0VSIiwiQURNSU4iXSwianRpIjoiOWVkZTEyM2MtNzdiMS00OTBhLTgxYWItODdlNDdiNzdiNDAxIiwiY2xpZW50X2lkIjoiYXV0aF9pZCIsInNjb3BlIjpbInJlYWQiXX0.AZYk3xl2WzWYBgZ6gEHPdPsmLcfLH-hPaftaYeiLHyA" "http://localhost:8090/api/user"
+
+-- 4. client login
+http://172.20.63.120:8095/oauth/authorize?client_id=auth_id&redirect_uri=http://172.20.63.120:8095/callback&response_type=code
